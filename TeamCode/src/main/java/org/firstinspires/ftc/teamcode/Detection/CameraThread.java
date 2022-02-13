@@ -26,6 +26,10 @@ public class CameraThread implements Runnable {
 
     public static int THRESHOLD = 109;
     public static int BLUR_KERNEL_SIZE = 9;
+    //LEFT 20 - 95
+    //MIDDLE 150 - 260
+    //RIGHT - otherwise
+    //x axis
 
     public enum CAMERA_STATE {
         NULL,
@@ -84,12 +88,12 @@ public class CameraThread implements Runnable {
         this.active = true;
     }
 
-    public static Lifter.LEVEL getRect(Rect rect) {
-        return Lifter.LEVEL.THIRD;
-    }
-
     public static Lifter.LEVEL getResult() {
-        return Lifter.LEVEL.THIRD;
+        Rect resultRect = CameraThread.detectionRect;
+        double x = resultRect.x;
+        if(x >= 15 && x <= 110) return Lifter.LEVEL.FIRST;
+        else if(x >= 150 && x <= 250) return Lifter.LEVEL.SECOND;
+        else return Lifter.LEVEL.THIRD;
     }
 
     public boolean isKilled() {

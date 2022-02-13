@@ -63,11 +63,11 @@ public class Intake {
         if (timer.milliseconds() < WATCHDOG_DELAY) return;
 
         if (rawDistance < DISTANCE_THRESHOLD && rawDistance != 0.0) {
-            if (gamepad != null) gamepad.rumble(200);
             raiseIntake();
-            intake.setVelocity(velocity / 2.0);
-            stopIntake(200);
+            intake.setVelocity(velocity * 0.7);
+            stopIntake(400);
             timer.reset();
+            if (gamepad != null) gamepad.rumble(200);
         }
     }
 
@@ -77,8 +77,8 @@ public class Intake {
     }
 
     public void initIntake() {
-        setIntakePosition(0.52);
         releaseElements();
+        setIntakePosition(0.52);
     }
 
     public void raiseIntake() {
@@ -188,7 +188,7 @@ public class Intake {
     }
 
     public void blockElements() {
-        intakeServo.setPosition(0.6);
+        intakeServo.setPosition(0.3);
     }
 
     public void blockElements(long wait) {

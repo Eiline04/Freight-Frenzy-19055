@@ -260,6 +260,10 @@ public class MecanumDriveImpl extends MecanumDrive {
         rightFront.setPower(v3);
     }
 
+    public void breakFollowing() {
+        trajectorySequenceRunner.breakFollowing();
+    }
+
     @Override
     public double getRawExternalHeading() {
         return imu.getAngularOrientation().firstAngle;

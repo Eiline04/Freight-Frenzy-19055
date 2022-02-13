@@ -31,7 +31,7 @@ public class Lifter {
     public static double kD = 0.0;
 
     public enum LEVEL {
-        DOWN(200), FIRST(150), SECOND(300), THIRD(35000);
+        DOWN(200), FIRST(15000), SECOND(25000), THIRD(35000);
         public int ticks;
 
         LEVEL(int ticks) {
@@ -189,7 +189,8 @@ public class Lifter {
 
             double initialError = Math.abs(targetPosition - currentPosition);
             double maxPower = 0.8;
-            if (targetPosition < 2000) maxPower = 0.4;
+            if (targetPosition < 20000) maxPower = 0.7;
+            if (targetPosition < 5000) maxPower = 0.4;
 
             ElapsedTime timer = new ElapsedTime();
             timer.reset();
@@ -199,15 +200,15 @@ public class Lifter {
                 double power = Range.clip(Math.abs(correction), 0.4, 1.0) * sign;
                 lifterMotor.setPower(-Range.clip(power, -maxPower, maxPower));
 
-                telemetry.addData("current pos", currentPosition);
-                telemetry.addData("target pos", targetPosition);
-                telemetry.addData("correction", correction);
-                telemetry.addData("power", power);
-                telemetry.update();
+//                telemetry.addData("current pos", currentPosition);
+//                telemetry.addData("target pos", targetPosition);
+//                telemetry.addData("correction", correction);
+//                telemetry.addData("power", power);
+//                telemetry.update();
 
                 if (Math.abs(targetPosition - currentPosition) < 2000) break;
 
-                if (timer.seconds() > 4.0) {
+                if (timer.seconds() > 2.5) {
                     telemetry.log().clear();
                     telemetry.addLine("Thread aborted");
                     telemetry.update();

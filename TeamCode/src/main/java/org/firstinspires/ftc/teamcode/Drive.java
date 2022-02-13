@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.Auto.PoseStorage;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.MecanumDriveImpl;
 import org.firstinspires.ftc.teamcode.utilities.ControllerInput;
 import org.firstinspires.ftc.teamcode.wrappers.DuckMechanism;
@@ -26,6 +28,17 @@ public class Drive extends LinearOpMode {
     public double baseServoPosition, angleServoPosition;
     public double deltaBase = 0.008, deltaAngle = 0.01;
 
+    public static final boolean USING_ROARDUNNER = true;
+    Pose2d startPose = new Pose2d(-40.085, -63.54, radians(270.0));
+    Pose2d shippingHubPose = new Pose2d(-9.0 - 2.0, -48.0 + 1.7, radians(265.0));
+
+    enum Mode {
+        DRIVER_CONTROL,
+        AUTOMATIC_CONTROL
+    }
+
+    Mode currentMode = Mode.DRIVER_CONTROL;
+
     @Override
     public void runOpMode() {
 
@@ -41,6 +54,16 @@ public class Drive extends LinearOpMode {
         telemetry.addLine("Ready!");
         telemetry.update();
 
+        if (USING_ROARDUNNER) {
+            Pose2d storedPose = PoseStorage.currentPose;
+            drive.setPoseEstimate(storedPose);
+            if (PoseStorage.currentPose.getX() == 0 && PoseStorage.currentPose.getY() == 0) {
+                telemetry.addLine("Nicio pozitie stocata");
+                telemetry.update();
+                drive.setPoseEstimate(startPose);
+            }
+        }
+
         waitForStart();
         intake.raiseIntake();
         baseServoPosition = turret.getBasePos();
@@ -53,12 +76,6 @@ public class Drive extends LinearOpMode {
 
 //            telemetry.addData("Ticks", lifter.getLifterPosition());
 //            telemetry.addData("Vel", lifter.lifterMotor.getVelocity());
-
-            double leftStickY = -controller1.left_stick_y;
-            double leftStickX = -controller1.left_stick_x;
-            double rotation = -controller1.right_stick_x;
-
-            drive.setDrivePower(new Pose2d(leftStickY, leftStickX, rotation));
 
             //Intake servos
             if (controller2.dpadDownOnce()) {
@@ -134,9 +151,41 @@ public class Drive extends LinearOpMode {
                 lifter.goToPosition(1500, Lifter.LEVEL.DOWN.ticks);
             }
 
-            if(controller2.leftBumperOnce()) {
+            if (controller2.leftBumperOnce()) {
                 lifter.closeBox();
                 lifter.goToPosition(0, Lifter.LEVEL.DOWN.ticks);
+            }
+
+            switch (currentMode) {
+                case DRIVER_CONTROL:
+                    double leftStickY = -controller1.left_stick_y;
+                    double leftStickX = -controller1.left_stick_x;
+                    double rotation = -controller1.right_stick_x;
+
+                    drive.setDrivePower(new Pose2d(leftStickY, leftStickX, rotation));
+
+                    if (controller1.YOnce() && USING_ROARDUNNER) {
+                        //generate a spline and follow it
+                        Trajectory trajectory = drive.trajectoryBuilder(drive.getPoseEstimate()).lineToLinearHeading(shippingHubPose).build();
+                        intake.raiseIntake();
+                        intake.stopIntake();
+
+                        drive.followTrajectoryAsync(trajectory);
+                        currentMode = Mode.AUTOMATIC_CONTROL;
+                    }
+
+                    break;
+                case AUTOMATIC_CONTROL:
+                    if (controller1.BOnce() && USING_ROARDUNNER) {
+                        //cancel following
+                        drive.breakFollowing();
+                    }
+
+                    if (!drive.isBusy() && USING_ROARDUNNER) {
+                        //give control back to drivers
+                        currentMode = Mode.DRIVER_CONTROL;
+                    }
+                    break;
             }
 
             //telemetry.update();
@@ -159,5 +208,10 @@ public class Drive extends LinearOpMode {
 //            }
         }
 
+        PoseStorage.currentPose = new Pose2d(0,0); //reset pose storage
+    }
+
+    static double radians(double deg) {
+        return Math.toRadians(deg);
     }
 }

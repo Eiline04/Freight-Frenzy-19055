@@ -28,9 +28,15 @@ public class DetectionTest extends LinearOpMode {
         sleep(1000);
         cameraThread.setState(CameraThread.CAMERA_STATE.STREAM);
 
+        telemetry.addLine("Ready!");
+        telemetry.update();
+
         waitForStart();
 
         while (opModeIsActive()) {
+            Lifter.LEVEL result = CameraThread.getResult();
+            telemetry.addData("Height", result);
+
             Rect detection = CameraThread.detectionRect;
             telemetry.addData("Rectangle", detection.x + " " + detection.y);
             telemetry.update();
