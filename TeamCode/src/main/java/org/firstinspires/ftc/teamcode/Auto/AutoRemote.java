@@ -29,7 +29,7 @@ public class AutoRemote extends LinearOpMode {
     Lifter.LEVEL result;
 
     Pose2d startPose = new Pose2d(-40.085, -63.54, radians(270.0));
-    Pose2d shippingHubPose = new Pose2d(-9.0 - 2.0, -48.0 + 1.7, radians(265.0));
+    Pose2d shippingHubPose = new Pose2d(-9.0 - 2.0, -48.0 + 1.1, radians(265.0));
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -211,7 +211,7 @@ public class AutoRemote extends LinearOpMode {
     TrajectorySequence duck() {
         return drive.trajectorySequenceBuilder(startPose)
                 .UNSTABLE_addTemporalMarkerOffset(0.4, () -> duckMechanism.startSpin())
-                .lineToLinearHeading(new Pose2d(-55.23 + 1.5, -59.0, radians(270.0)))
+                .lineToLinearHeading(new Pose2d(-55.23 + 1.5 - 1, -59.0, radians(270.0)))
                 .waitSeconds(1)
                 .build();
     }

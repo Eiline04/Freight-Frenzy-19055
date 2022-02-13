@@ -64,7 +64,7 @@ public class Intake {
 
         if (rawDistance < DISTANCE_THRESHOLD && rawDistance != 0.0) {
             raiseIntake();
-            intake.setVelocity(velocity * 0.7);
+            intake.setVelocity(velocity * 0.5);
             stopIntake(400);
             timer.reset();
             if (gamepad != null) gamepad.rumble(200);

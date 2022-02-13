@@ -28,14 +28,20 @@ public class Drive extends LinearOpMode {
     public double baseServoPosition, angleServoPosition;
     public double deltaBase = 0.008, deltaAngle = 0.01;
 
+    private double powCoeff = 0.6;
+    private double triggerPow = 0.1;
+
+    private boolean virgin = true;
+
     public static final boolean USING_ROARDUNNER = true;
     Pose2d startPose = new Pose2d(-40.085, -63.54, radians(270.0));
-    Pose2d shippingHubPose = new Pose2d(-9.0 - 2.0, -48.0 + 1.7, radians(265.0));
+    Pose2d shippingHubPose = new Pose2d(-9.0 - 0.5 , -48.0 + 1.7, radians(265.0));
 
     enum Mode {
         DRIVER_CONTROL,
         AUTOMATIC_CONTROL
     }
+
 
     Mode currentMode = Mode.DRIVER_CONTROL;
 
@@ -53,6 +59,8 @@ public class Drive extends LinearOpMode {
 
         telemetry.addLine("Ready!");
         telemetry.update();
+
+        virgin = true;
 
         if (USING_ROARDUNNER) {
             Pose2d storedPose = PoseStorage.currentPose;
@@ -73,7 +81,7 @@ public class Drive extends LinearOpMode {
             controller2.update();
             intake.update();
             lifter.update();
-
+            drive.update();
 //            telemetry.addData("Ticks", lifter.getLifterPosition());
 //            telemetry.addData("Vel", lifter.lifterMotor.getVelocity());
 
@@ -107,6 +115,7 @@ public class Drive extends LinearOpMode {
             //Duck Mechanism
             if (controller2.YOnce()) {
                 //start or stop duck motor
+                if(virgin)turret.baseServo.setPosition(0.1);
                 if (duckMechanism.running) {
                     duckMechanism.stopSpin();
                 } else duckMechanism.startSpin();
@@ -143,6 +152,7 @@ public class Drive extends LinearOpMode {
                 turret.setAnglePos(angleServoPosition);
             }
 
+            //-----LIFTER-----
             if (controller2.rightBumperOnce()) {
                 turret.setBasePos(0.98);
                 lifter.goToPosition(0, Lifter.LEVEL.THIRD.ticks);
@@ -154,6 +164,18 @@ public class Drive extends LinearOpMode {
             if (controller2.leftBumperOnce()) {
                 lifter.closeBox();
                 lifter.goToPosition(0, Lifter.LEVEL.DOWN.ticks);
+            }
+
+            //----- LIL' FORWARD----
+
+            if(controller1.left_trigger>0.05){
+                triggerPow = controller1.left_trigger * powCoeff;
+                drive.setMotorPowers(triggerPow,triggerPow,triggerPow,triggerPow);
+            }
+
+            if(controller1.right_trigger>0.05){
+                triggerPow = controller1.right_trigger * -powCoeff;
+                drive.setMotorPowers(triggerPow,triggerPow,triggerPow,triggerPow);
             }
 
             switch (currentMode) {
