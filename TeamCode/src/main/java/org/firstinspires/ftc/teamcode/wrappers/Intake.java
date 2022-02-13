@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.wrappers;
 
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -19,7 +20,8 @@ public class Intake {
     public Servo rightServo;
     public Servo intakeServo;
 
-    public Rev2mDistanceSensor distanceSensor;
+    public DistanceSensor distanceSensor;
+    //public Rev2mDistanceSensor distanceSensor;
     private volatile double rawDistance;
     public volatile boolean enableWatchdog = true;
 

@@ -115,7 +115,10 @@ public class Drive extends LinearOpMode {
             //Duck Mechanism
             if (controller2.YOnce()) {
                 //start or stop duck motor
-                if(virgin)turret.baseServo.setPosition(0.1);
+                if(virgin) {
+                    turret.baseServo.setPosition(0.1);
+                    turret.angleServo.setPosition(0.15);
+                }
                 if (duckMechanism.running) {
                     duckMechanism.stopSpin();
                 } else duckMechanism.startSpin();

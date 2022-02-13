@@ -29,7 +29,7 @@ public class AutoRemote extends LinearOpMode {
     Lifter.LEVEL result;
 
     Pose2d startPose = new Pose2d(-40.085, -63.54, radians(270.0));
-    Pose2d shippingHubPose = new Pose2d(-9.0 - 2.0, -48.0 + 1.1, radians(265.0));
+    Pose2d shippingHubPose = new Pose2d(-9.0 - 2.0, -48.0 + 1.12, radians(265.0));
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -133,77 +133,77 @@ public class AutoRemote extends LinearOpMode {
                 .setReversed(false)
                 .resetVelConstraint()
 
-                //START OF CYCLE 2
-                .splineToSplineHeading(new Pose2d(6.0, -69.0, radians(0.0)), radians(0.0))
-                .addDisplacementMarker(() -> {
-                    intake.lowerIntake();
-                    intake.startIntake();
-                })
-                .setVelConstraint(new TranslationalVelocityConstraint(30.0))
-                .splineToSplineHeading(new Pose2d(50.0 - 3.0, -72.0, radians(20.0)), radians(20.0))
-                .waitSeconds(0.3)
-
-                //go back now
-                .resetVelConstraint()
-                .setReversed(true)
-                .setVelConstraint(new TranslationalVelocityConstraint(30.0))
-                .splineToSplineHeading(new Pose2d(15.84, -71.0, radians(0.0)), radians(180.0))
-                .addDisplacementMarker(() -> {
-                    intake.raiseIntake();
-                    intake.stopIntake();
-
-                })
-                .UNSTABLE_addTemporalMarkerOffset(0.6, () -> lifter.goToPosition(0, Lifter.LEVEL.THIRD.ticks))
-
-                .splineToSplineHeading(shippingHubPose, radians(95.0))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> lifter.dumpingBox.setPosition(0.8))
-                .waitSeconds(0.7)
-                .addDisplacementMarker(() -> {
-                    lifter.closeBox();
-                    lifter.goToPosition(0, Lifter.LEVEL.DOWN.ticks);
-                })
-                .setReversed(false)
-                .resetVelConstraint()
-
-                //START OF CYCLE 3
-
-                .splineToSplineHeading(new Pose2d(6.0, -69.0, radians(0.0)), radians(0.0))
-                .addDisplacementMarker(() -> {
-                    intake.lowerIntake();
-                    intake.startIntake();
-                })
-                .setVelConstraint(new TranslationalVelocityConstraint(30.0))
-                .splineToSplineHeading(new Pose2d(50.0, -72.0, radians(30.0)), radians(30.0))
-                .waitSeconds(0.3)
-
-                //go back now
-                .resetVelConstraint()
-                .setReversed(true)
-                .setVelConstraint(new TranslationalVelocityConstraint(35.0))
-                .splineToSplineHeading(new Pose2d(15.84, -71.0, radians(0.0)), radians(180.0))
-                .addDisplacementMarker(() -> {
-                    intake.raiseIntake();
-                    intake.stopIntake();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(0.6, () -> lifter.goToPosition(0, Lifter.LEVEL.THIRD.ticks))
-
-                .splineToSplineHeading(shippingHubPose, radians(95.0))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> lifter.dumpingBox.setPosition(0.8))
-                .waitSeconds(0.7)
-                .addDisplacementMarker(() -> {
-                    lifter.closeBox();
-                    lifter.goToPosition(0, Lifter.LEVEL.DOWN.ticks);
-                })
-                .setReversed(false)
-                .resetVelConstraint()
+//                //START OF CYCLE 2
+//                .splineToSplineHeading(new Pose2d(6.0, -69.0, radians(0.0)), radians(0.0))
+//                .addDisplacementMarker(() -> {
+//                    intake.lowerIntake();
+//                    intake.startIntake();
+//                })
+//                .setVelConstraint(new TranslationalVelocityConstraint(30.0))
+//                .splineToSplineHeading(new Pose2d(50.0 + 4 , -55.5, radians(20.0)), radians(20.0))
+//                .waitSeconds(0.3)
+//
+//                //go back now
+//                .resetVelConstraint()
+//                .setReversed(true)
+//                .setVelConstraint(new TranslationalVelocityConstraint(30.0))
+//                .splineToSplineHeading(new Pose2d(23.00, -69.0, radians(0.0)), radians(180.0))
+//                .addDisplacementMarker(() -> {
+//                    intake.raiseIntake();
+//                    intake.stopIntake();
+//
+//                })
+//                .UNSTABLE_addTemporalMarkerOffset(0.6, () -> lifter.goToPosition(0, Lifter.LEVEL.THIRD.ticks))
+//
+//                .splineToSplineHeading(shippingHubPose, radians(95.0))
+//                .UNSTABLE_addTemporalMarkerOffset(0, () -> lifter.dumpingBox.setPosition(0.8))
+//                .waitSeconds(0.7)
+//                .addDisplacementMarker(() -> {
+//                    lifter.closeBox();
+//                    lifter.goToPosition(0, Lifter.LEVEL.DOWN.ticks);
+//                })
+//                .setReversed(false)
+//                .resetVelConstraint()
+//
+//                //START OF CYCLE 3
+//
+//                .splineToSplineHeading(new Pose2d(6.0, -67.5, radians(0.0)), radians(0.0))
+//                .addDisplacementMarker(() -> {
+//                    intake.lowerIntake();
+//                    intake.startIntake();
+//                })
+//                .setVelConstraint(new TranslationalVelocityConstraint(30.0))
+//                .splineToSplineHeading(new Pose2d(50.0 + 5, -55.5, radians(30.0)), radians(30.0))
+//                .waitSeconds(0.3)
+//
+//                //go back now
+//                .resetVelConstraint()
+//                .setReversed(true)
+//                .setVelConstraint(new TranslationalVelocityConstraint(35.0))
+//                .splineToSplineHeading(new Pose2d(23.00, -69.0, radians(0.0)), radians(180.0))
+//                .addDisplacementMarker(() -> {
+//                    intake.raiseIntake();
+//                    intake.stopIntake();
+//                })
+//                .UNSTABLE_addTemporalMarkerOffset(0.6, () -> lifter.goToPosition(0, Lifter.LEVEL.THIRD.ticks))
+//
+//                .splineToSplineHeading(shippingHubPose, radians(95.0))
+//                .UNSTABLE_addTemporalMarkerOffset(0, () -> lifter.dumpingBox.setPosition(0.8))
+//                .waitSeconds(0.7)
+//                .addDisplacementMarker(() -> {
+//                    lifter.closeBox();
+//                    lifter.goToPosition(0, Lifter.LEVEL.DOWN.ticks);
+//                })
+//                .setReversed(false)
+//                .resetVelConstraint()
 
                 //PARK
-                .splineToSplineHeading(new Pose2d(6.0, -69.0, radians(0.0)), radians(0.0))
+                .splineToSplineHeading(new Pose2d(6.0, -67.5, radians(0.0)), radians(0.0))
                 .addDisplacementMarker(() -> {
                     intake.raiseIntake();
                     intake.stopIntake();
                 })
-                .splineToSplineHeading(new Pose2d(40.0, -72.0, radians(10.0)), radians(10.0))
+                .splineToSplineHeading(new Pose2d(40.0, -67.5, radians(10.0)), radians(10.0))
                 .build();
 
     }
